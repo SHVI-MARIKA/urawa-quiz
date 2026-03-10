@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>うらわしってるかなクイズ</title>
+  <style>
+    :root {
+      --bg: #f7f9fc;
+      --card: #ffffff;
+      --text: #243447;
+      --sub: #5b6b7a;
+      --accent: #4f8cff;
+      --accent2: #7cc576;
+      --accent3: #f7b267;
+      --danger: #f06a6a;
+      --border: #dfe7f1;
+      --shadow: 0 8px 24px rgba(28, 58, 88, 0.08);
+      --radius: 20px;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Hiragino Sans", "Yu Gothic", "Meiryo", sans-serif;
+      background: linear-gradient(180deg, #f5f9ff 0%, #eef6ff 100%);
+      color: var(--text);
+    }
+
+    .app {
+      max-width: 480px;
+      margin: 0 auto;
+      min-height: 100vh;
+      padding: 20px 16px 28px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .screen {
+      display: none;
+      animation: fade 0.2s ease;
+    }
+
+    .screen.active {
+      display: block;
+    }
+
+    @keyframes fade {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .panel {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 20px;
+      margin-top: 12px;
+    }
+
+    h1, h2 {
+      margin: 0 0 12px;
+      line-height: 1.4;
+    }
+
+    h1 {
+      font-size: 28px;
+      text-align: center;
+    }
+
+    h2 {
+      font-size: 24px;
+      text-align: center;
+    }
+
+    p {
+      line-height: 1.8;
+      margin: 0 0 12px;
+    }
+
+    .subtext {
+      color: var(--sub);
+      text-align: center;
+      font-size: 15px;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 24px 16px;
+    }
+
+    .hero-emoji {
+      font-size: 50px;
+      margin-bottom: 8px;
+    }
+
+    .btn {
+      width: 100%;
+      border: none;
+      border-radius: 16px;
+      padding: 16px 18px;
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 12px;
+      background: var(--accent);
+      color: white;
+      box-shadow: var(--shadow);
+    }
+
+    .btn.secondary {
+      background: white;
+      color: var(--accent);
+      border: 2px solid var(--accent);
+      box-shadow: none;
+    }
+
+    .btn.success {
+      background: var(--accent2);
+      color: white;
+    }
+
+    .btn.orange {
+      background: var(--accent3);
+      color: white;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .card-btn {
+      text-align: left;
+      background: white;
+      border: 2px solid var(--border);
+      border-radius: 18px;
+      padding: 16px;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    .card-btn.done {
+      border-color: var(--accent2);
+      background: #f3fff1;
+    }
+
+    .card-label {
+      font-size: 14px;
+      color: var(--sub);
+      margin-bottom: 6px;
+    }
+
+    .card-title {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .done-badge {
+      display: inline-block;
+      margin-top: 6px;
+      font-size: 13px;
+      color: #2f8f4e;
+      font-weight: 700;
+    }
+
+    .question-text {
+      font-size: 21px;
+      font-weight: 700;
+      line-height: 1.7;
+      margin-bottom: 18px;
+    }
+
+    .choice {
+      width: 100%;
+      text-align: left;
+      padding: 16px;
+      margin-top: 10px;
+      font-size: 18px;
+      border-radius: 16px;
+      border: 2px solid var(--border);
+      background: white;
+      cursor: pointer;
+    }
+
+    .result-mark {
+      font-size: 48px;
+      text-align: center;
+      margin-bottom: 6px;
+    }
+
+    .result-title {
+      text-align: center;
+      font-size: 30px;
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+
+    .progress {
+      text-align: center;
+      color: var(--sub);
+      font-size: 14px;
+      margin-top: 8px;
+    }
+
+    .small-note {
+      font-size: 13px;
+      color: var(--sub);
+      text-align: center;
+      margin-top: 8px;
+    }
+
+    ul.rules {
+      margin: 0;
+      padding-left: 20px;
+      line-height: 1.9;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <!-- タイトル -->
+    <section id="screen-title" class="screen active">
+      <div class="panel hero">
+        <div class="hero-emoji">🗺️✨</div>
+        <h1>うらわしってるかなクイズ</h1>
+        <p class="subtext">うらわの たべもの・みるところ・あそぶところを もっと しろう！</p>
+        <button class="btn" onclick="goTo('screen-howto')">つぎへ</button>
+      </div>
+    </section>
+
+    <!-- あそびかた -->
+    <section id="screen-howto" class="screen">
+      <div class="panel">
+        <h2>あそびかた</h2>
+        <ul class="rules">
+          <li>すきなカードを 1こ えらぶ</li>
+          <li>クイズを よむ</li>
+          <li>こたえを えらぶ</li>
+          <li>ほかのカードにも ちょうせん！</li>
+        </ul>
+        <button class="btn" onclick="goTo('screen-start')">つぎへ</button>
+      </div>
+    </section>
+
+    <!-- START -->
+    <section id="screen-start" class="screen">
+      <div class="panel hero">
+        <div class="hero-emoji">🎴</div>
+        <h2>カードクイズ</h2>
+        <p class="subtext">すきなカードを えらんでね</p>
+        <button class="btn orange" onclick="renderCardSelect()">START</button>
+      </div>
+    </section>
+
+    <!-- カード選択 -->
+    <section id="screen-cards" class="screen">
+      <div class="panel">
+        <h2>カードを えらぼう</h2>
+        <div class="progress" id="progress-text"></div>
+        <div class="cards" id="cards-container"></div>
+        <button class="btn secondary" onclick="resetGame()">はじめから やりなおす</button>
+      </div>
+    </section>
+
+    <!-- 問題 -->
+    <section id="screen-question" class="screen">
+      <div class="panel">
+        <div class="progress" id="question-progress"></div>
+        <div class="question-text" id="question-text"></div>
+        <div id="choices-container"></div>
+      </div>
+    </section>
+
+    <!-- 結果 -->
+    <section id="screen-result" class="screen">
+      <div class="panel">
+        <div class="result-mark" id="result-mark"></div>
+        <div class="result-title" id="result-title"></div>
+        <p id="result-message"></p>
+        <button class="btn success" onclick="renderCardSelect()">ほかのカードを ひく</button>
+        <button class="btn secondary" onclick="goTo('screen-start')">やめる（あとで）</button>
+      </div>
+    </section>
+
+    <!-- 完了 -->
+    <section id="screen-complete" class="screen">
+      <div class="panel hero">
+        <div class="hero-emoji">🎉</div>
+        <h2>ぜんぶ できた！</h2>
+        <p>うらわのこと、もっと しれたかな？</p>
+        <p class="small-note">もういちど あそぶことも できるよ。</p>
+        <button class="btn" onclick="resetGame()">もういちど あそぶ</button>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const quizData = [
+      {
+        id: "A",
+        label: "カードA",
+        title: "アカシエ",
+        question: "うらわで ゆうめいな ケーキやさん「アカシエ」が イメージした くには どれ？",
+        choices: [
+          "A フランス",
+          "B イギリス",
+          "C アメリカ"
+        ],
+        correctIndex: 0,
+        correctMessage: "せいかいは「フランス」。オーナーシェフの おきのさんは、とことん こだわって、パリの パティスリーを ひょうげんしたかったんだって。すてきな おみせだね。",
+        wrongMessage: "おしい！ せいかいは「フランス」だよ。アカシエは、パリの パティスリーの ふんいきを めざした おみせなんだって。"
+      },
+      {
+        id: "B",
+        label: "カードB",
+        title: "ときわだんご",
+        question: "「ときわだんご」を つくった「かきぬま なおじろう」は、うらわで さいがいが おきた ときに、だんごを くばったんだ。その さいがいは どれかな？",
+        choices: [
+          "A かさい",
+          "B じしん",
+          "C つなみ"
+        ],
+        correctIndex: 0,
+        correctMessage: "かきぬま なおじろうは、うらわの たいかで いえを なくした ひとたちに、むりょうで おだんごを くばってくれたんだ。そこから、ときわだんごは とても ゆうめいに なったんだよ。",
+        wrongMessage: "おしい！ せいかいは「かさい」だよ。うらわの たいかの ときに、むりょうで おだんごを くばったんだって。"
+      },
+      {
+        id: "C",
+        label: "カードC",
+        title: "うちゅうかがくかん",
+        question: "うらわに ある「うちゅうかがくかん」では、うちゅうに いった いきものを みることが できるよ。その いきものは どれかな？",
+        choices: [
+          "A トカゲ",
+          "B ハムスター",
+          "C めだか"
+        ],
+        correctIndex: 2,
+        correctMessage: "うらわの うちゅうかがくかんに いくと、ロケットに のって うちゅうに いった めだかに あえるよ。",
+        wrongMessage: "おしい！ せいかいは「めだか」だよ。うちゅうに いった めだかを みることが できるんだ。"
+      }
+    ];
+
+    let currentCardIndex = null;
+    let completed = JSON.parse(sessionStorage.getItem("urawaQuizCompleted") || "[]");
+
+    function saveProgress() {
+      sessionStorage.setItem("urawaQuizCompleted", JSON.stringify(completed));
+    }
+
+    function goTo(screenId) {
+      document.querySelectorAll(".screen").forEach(screen => {
+        screen.classList.remove("active");
+      });
+      document.getElementById(screenId).classList.add("active");
+    }
+
+    function renderCardSelect() {
+      const container = document.getElementById("cards-container");
+      container.innerHTML = "";
+
+      quizData.forEach((card, index) => {
+        const done = completed.includes(card.id);
+        const button = document.createElement("button");
+        button.className = "card-btn" + (done ? " done" : "");
+        button.innerHTML = `
+          <div class="card-label">${card.label}</div>
+          <div class="card-title">${card.title}</div>
+          <div>${done ? '<span class="done-badge">✔ クリアずみ</span>' : 'クイズに ちょうせん！'}</div>
+        `;
+        button.onclick = () => openQuestion(index);
+        container.appendChild(button);
+      });
+
+      document.getElementById("progress-text").textContent =
+        `クリア ${completed.length} / ${quizData.length}`;
+
+      if (completed.length === quizData.length) {
+        goTo("screen-complete");
+        return;
+      }
+
+      goTo("screen-cards");
+    }
+
+    function openQuestion(index) {
+      currentCardIndex = index;
+      const card = quizData[index];
+      document.getElementById("question-progress").textContent = `${card.label}：${card.title}`;
+      document.getElementById("question-text").textContent = card.question;
+
+      const choicesContainer = document.getElementById("choices-container");
+      choicesContainer.innerHTML = "";
+
+      card.choices.forEach((choice, choiceIndex) => {
+        const btn = document.createElement("button");
+        btn.className = "choice";
+        btn.textContent = choice;
+        btn.onclick = () => showResult(choiceIndex === card.correctIndex);
+        choicesContainer.appendChild(btn);
+      });
+
+      goTo("screen-question");
+    }
+
+    function showResult(isCorrect) {
+      const card = quizData[currentCardIndex];
+      document.getElementById("result-mark").textContent = isCorrect ? "⭕" : "△";
+      document.getElementById("result-title").textContent = isCorrect ? "せいかい！" : "おしい！";
+      document.getElementById("result-message").textContent = isCorrect ? card.correctMessage : card.wrongMessage;
+
+      if (!completed.includes(card.id)) {
+        completed.push(card.id);
+        saveProgress();
+      }
+
+      goTo("screen-result");
+    }
+
+    function resetGame() {
+      completed = [];
+      saveProgress();
+      goTo("screen-title");
+    }
+  </script>
+</body>
+</html>
