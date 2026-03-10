@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>うらわしってるかなクイズ</title>
+  <style>
+    :root {
+      --bg: #eef6ff;
+      --ink: #304255;
+      --sub: #647789;
+      --white: #ffffff;
+      --line: #dbe8f6;
+      --blue: #72aaf7;
+      --blue-deep: #4585e6;
+      --yellow: #ffd76a;
+      --orange: #ffb56b;
+      --pink: #ff9fb0;
+      --purple: #bba4ff;
+      --green: #8fda95;
+      --mint: #dff7ea;
+      --peach: #fff0dd;
+      --lav: #f1ecff;
+      --danger: #ff8b8b;
+      --shadow: 0 10px 24px rgba(54, 94, 146, 0.14);
+      --shadow-soft: 0 6px 14px rgba(54, 94, 146, 0.10);
+      --radius-xl: 28px;
+      --radius-lg: 22px;
+      --radius-md: 16px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      font-family: "Hiragino Sans", "Yu Gothic", "Meiryo", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top right, rgba(255,255,255,.8), transparent 28%),
+        radial-gradient(circle at 20% 15%, rgba(255,230,157,.35), transparent 22%),
+        linear-gradient(180deg, #f7fbff 0%, #ebf5ff 100%);
+    }
+
+    body::before,
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    body::before {
+      background-image:
+        radial-gradient(circle, rgba(255, 216, 106, .35) 0 3px, transparent 3px),
+        radial-gradient(circle, rgba(187, 164, 255, .30) 0 2px, transparent 2px),
+        radial-gradient(circle, rgba(143, 218, 149, .30) 0 2px, transparent 2px);
+      background-size: 140px 140px, 180px 180px, 220px 220px;
+      background-position: 16px 24px, 80px 100px, 20px 180px;
+      opacity: .55;
+    }
+
+    .app {
+      position: relative;
+      z-index: 1;
+      max-width: 500px;
+      margin: 0 auto;
+      min-height: 100vh;
+      padding: 16px 14px 28px;
+    }
+
+    .screen {
+      display: none;
+      animation: slideIn .24s ease;
+    }
+
+    .screen.active {
+      display: block;
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(10px) scale(.985); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .slide {
+      background: rgba(255,255,255,.94);
+      border: 1px solid rgba(219, 232, 246, .9);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      min-height: calc(100vh - 44px);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .slide-head {
+      padding: 14px 18px 10px;
+      border-bottom: 2px dashed rgba(114,170,247,.28);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      color: var(--sub);
+      background: linear-gradient(180deg, rgba(255,255,255,.95), rgba(247,251,255,.9));
+    }
+
+    .slide-body {
+      padding: 18px 18px 24px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .slide.theme-title .slide-body { background: linear-gradient(180deg, #fdfcff 0%, #eef6ff 100%); }
+    .slide.theme-howto .slide-body { background: linear-gradient(180deg, #fffdf6 0%, #f8fbff 100%); }
+    .slide.theme-start .slide-body { background: linear-gradient(180deg, #fff8fb 0%, #f2f7ff 100%); }
+    .slide.theme-cards .slide-body { background: linear-gradient(180deg, #f4fbff 0%, #f8fcff 100%); }
+    .slide.theme-question .slide-body { background: linear-gradient(180deg, #fffdf9 0%, #f6fbff 100%); }
+    .slide.theme-correct .slide-body { background: linear-gradient(180deg, #f4fff1 0%, #fbfffc 100%); }
+    .slide.theme-wrong .slide-body { background: linear-gradient(180deg, #fff8f5 0%, #fffefe 100%); }
+    .slide.theme-complete .slide-body { background: linear-gradient(180deg, #fffef5 0%, #f5fbff 100%); }
+
+    .hero-card,
+    .bubble-card,
+    .rule-card,
+    .question-panel,
+    .result-panel,
+    .complete-panel {
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-soft);
+      position: relative;
+    }
+
+    .hero-card {
+      text-align: center;
+      padding: 24px 18px 22px;
+      overflow: hidden;
+    }
+
+    .hero-card::before {
+      content: "✨ ✦ ✨";
+      position: absolute;
+      top: 10px;
+      left: 18px;
+      letter-spacing: 8px;
+      color: rgba(114,170,247,.55);
+      font-size: 14px;
+    }
+
+    .hero-icon {
+      width: 88px;
+      height: 88px;
+      margin: 0 auto 12px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-size: 42px;
+      background: linear-gradient(180deg, #fff5be, #ffd76a);
+      box-shadow: inset 0 5px 12px rgba(255,255,255,.55), 0 8px 18px rgba(255, 196, 60, .24);
+    }
+
+    .hero-title {
+      font-size: 30px;
+      line-height: 1.35;
+      margin: 0;
+      letter-spacing: .02em;
+    }
+
+    .hero-sub {
+      margin: 10px 0 0;
+      color: var(--sub);
+      line-height: 1.8;
+      font-size: 15px;
+    }
+
+    .mini-banner {
+      align-self: center;
+      background: #ffffff;
+      border: 2px dashed rgba(114,170,247,.35);
+      border-radius: 999px;
+      padding: 7px 14px;
+      font-size: 13px;
+      color: var(--sub);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .section-title {
+      font-size: 28px;
+      line-height: 1.35;
+      margin: 0;
+      text-align: center;
+    }
+
+    .rule-grid {
+      display: grid;
+      gap: 10px;
+    }
+
+    .rule-card {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      padding: 14px;
+      background: linear-gradient(180deg, #ffffff 0%, #fffdfa 100%);
+    }
+
+    .rule-num {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      flex: 0 0 38px;
+      font-weight: 800;
+      color: white;
+      background: linear-gradient(180deg, var(--blue), var(--blue-deep));
+      box-shadow: var(--shadow-soft);
+    }
+
+    .rule-text {
+      font-size: 18px;
+      line-height: 1.7;
+    }
+
+    .big-start {
+      border: none;
+      width: 100%;
+      padding: 22px 18px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, #ffcb74, #ffab61);
+      color: white;
+      font-size: 30px;
+      font-weight: 900;
+      box-shadow: 0 12px 22px rgba(255, 164, 80, .28);
+      cursor: pointer;
+      letter-spacing: .08em;
+    }
+
+    .big-start:hover,
+    .main-btn:hover,
+    .sub-btn:hover,
+    .card-item:hover,
+    .choice-btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .main-btn,
+    .sub-btn {
+      border: none;
+      border-radius: 18px;
+      font-size: 19px;
+      font-weight: 800;
+      padding: 16px 18px;
+      cursor: pointer;
+      transition: transform .14s ease;
+    }
+
+    .main-btn {
+      background: linear-gradient(180deg, var(--blue), var(--blue-deep));
+      color: white;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .sub-btn {
+      background: white;
+      color: var(--blue-deep);
+      border: 2px solid rgba(114,170,247,.45);
+    }
+
+    .button-stack {
+      display: grid;
+      gap: 10px;
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      align-items: stretch;
+    }
+
+    .card-item {
+      border: none;
+      padding: 0;
+      background: transparent;
+      cursor: pointer;
+      text-align: center;
+      transition: transform .14s ease;
+    }
+
+    .card-surface {
+      position: relative;
+      overflow: hidden;
+      min-height: 185px;
+      border-radius: 8px;
+      padding: 10px 8px 12px;
+      box-shadow: 0 8px 18px rgba(64, 87, 116, .14);
+      color: #243447;
+      border: 1px solid rgba(80, 99, 120, .20);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .card-theme-a { background: linear-gradient(180deg, #ffb443 0%, #f29a1f 100%); }
+    .card-theme-b { background: linear-gradient(180deg, #b8d6ab 0%, #96bc86 100%); }
+    .card-theme-c { background: linear-gradient(180deg, #c1b2e5 0%, #a99ad2 100%); }
+
+    .card-surface::before,
+    .card-surface::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background: rgba(54, 62, 78, .20);
+    }
+
+    .card-surface::before { left: 10px; }
+    .card-surface::after { right: 10px; }
+
+    .card-top {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .card-chip {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.78);
+      font-size: 11px;
+      font-weight: 800;
+      color: #35506d;
+      border: 1px solid rgba(255,255,255,.55);
+    }
+
+    .done-ribbon {
+      position: absolute;
+      right: -28px;
+      top: 12px;
+      transform: rotate(35deg);
+      background: linear-gradient(180deg, #8ed96a, #5ab865);
+      color: white;
+      font-size: 10px;
+      font-weight: 900;
+      padding: 5px 28px;
+      letter-spacing: .06em;
+      box-shadow: 0 6px 16px rgba(90,184,101,.28);
+      z-index: 2;
+    }
+
+    .card-image {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      place-items: center;
+      min-height: 72px;
+      width: 100%;
+      border-radius: 6px;
+      border: 1px solid rgba(54, 62, 78, .18);
+      background: rgba(255,255,255,.18);
+      overflow: hidden;
+      margin: 8px 0 8px;
+    }
+
+    .card-image img,
+    .question-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .placeholder-emoji {
+      font-size: 42px;
+      line-height: 1;
+    }
+
+    .card-back-symbol {
+      font-size: 28px;
+      opacity: .95;
+      margin-bottom: 6px;
+      filter: drop-shadow(0 1px 0 rgba(255,255,255,.3));
+    }
+
+    .card-title {
+      position: relative;
+      z-index: 1;
+      font-size: 16px;
+      font-weight: 900;
+      line-height: 1.35;
+      margin: 0;
+      text-shadow: 0 1px 0 rgba(255,255,255,.25);
+      color: #203040;
+    }
+
+    .card-sub {
+      position: relative;
+      z-index: 1;
+      font-size: 12px;
+      margin-top: 6px;
+      color: #203040;
+      font-weight: 800;
+      line-height: 1.4;
+    }
+
+    .progress-badge {
+      align-self: center;
+      background: white;
+      border: 2px dashed rgba(114,170,247,.32);
+      border-radius: 999px;
+      padding: 8px 16px;
+      font-size: 14px;
+      color: #53677c;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .question-panel {
+      padding: 14px;
+      background: linear-gradient(180deg, #ffffff 0%, #fffdf9 100%);
+    }
+
+    .question-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+      font-size: 13px;
+      color: var(--sub);
+      font-weight: 700;
+    }
+
+    .question-frame {
+      border-radius: 22px;
+      padding: 14px;
+      border: 2px dashed rgba(114,170,247,.26);
+      background: linear-gradient(180deg, #fffefb, #ffffff);
+    }
+
+    .question-image {
+      min-height: 104px;
+      border-radius: 18px;
+      border: 2px dashed rgba(114,170,247,.24);
+      background: linear-gradient(180deg, #f7fbff, #fff6e9);
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+
+
+    ruby {
+      ruby-align: center;
+      ruby-position: over;
+    }
+
+    rt {
+      font-size: 0.52em;
+      line-height: 1;
+      letter-spacing: 0;
+    }
+    .question-text {
+      font-size: 23px;
+      line-height: 1.72;
+      font-weight: 900;
+      margin: 0;
+    }
+
+    .choice-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .choice-btn {
+      border: none;
+      background: white;
+      border-radius: 18px;
+      padding: 14px 14px;
+      box-shadow: var(--shadow-soft);
+      border: 2px solid rgba(114,170,247,.18);
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      cursor: pointer;
+      text-align: left;
+      transition: transform .14s ease;
+    }
+
+    .choice-badge {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      color: white;
+      flex: 0 0 40px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .badge-a { background: linear-gradient(180deg, #8ec5ff, #5f95f5); }
+    .badge-b { background: linear-gradient(180deg, #ffba8e, #ff8f69); }
+    .badge-c { background: linear-gradient(180deg, #c2a6ff, #9d82f3); }
+
+    .choice-text {
+      font-size: 19px;
+      font-weight: 800;
+      line-height: 1.5;
+    }
+
+    .result-panel {
+      padding: 18px 16px 16px;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .result-panel.correct {
+      background: linear-gradient(180deg, #f4fff0 0%, #ffffff 100%);
+      border-color: #d7efcf;
+    }
+
+    .result-panel.wrong {
+      background: linear-gradient(180deg, #fff7f1 0%, #ffffff 100%);
+      border-color: #ffe0cf;
+    }
+
+    .result-mark {
+      width: 84px;
+      height: 84px;
+      margin: 4px auto 10px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-size: 42px;
+      box-shadow: var(--shadow-soft);
+      background: white;
+      border: 3px solid rgba(255,255,255,.7);
+    }
+
+    .result-title {
+      font-size: 34px;
+      font-weight: 900;
+      margin: 0 0 10px;
+    }
+
+    .speech {
+      position: relative;
+      margin-top: 10px;
+      background: white;
+      border: 2px solid rgba(114,170,247,.18);
+      border-radius: 22px;
+      padding: 16px;
+      text-align: left;
+      line-height: 1.9;
+      font-size: 17px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .speech::before {
+      content: "";
+      position: absolute;
+      top: -10px;
+      left: 34px;
+      width: 18px;
+      height: 18px;
+      background: white;
+      border-top: 2px solid rgba(114,170,247,.18);
+      border-left: 2px solid rgba(114,170,247,.18);
+      transform: rotate(45deg);
+    }
+
+    .complete-panel {
+      text-align: center;
+      padding: 26px 16px 22px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .complete-panel::before {
+      content: "⭐ ⭐ ✨ ⭐ ⭐";
+      position: absolute;
+      top: 10px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      opacity: .75;
+      letter-spacing: 8px;
+    }
+
+    .complete-mark {
+      width: 94px;
+      height: 94px;
+      border-radius: 50%;
+      margin: 8px auto 10px;
+      display: grid;
+      place-items: center;
+      font-size: 46px;
+      background: linear-gradient(180deg, #fff3ab, #ffd76a);
+      box-shadow: 0 10px 20px rgba(255, 205, 86, .26);
+    }
+
+    .complete-title {
+      font-size: 34px;
+      margin: 0;
+      line-height: 1.35;
+    }
+
+    .center-note {
+      text-align: center;
+      color: var(--sub);
+      line-height: 1.8;
+      margin: 0;
+    }
+
+    .footer-note {
+      text-align: center;
+      font-size: 13px;
+      color: var(--sub);
+    }
+
+    .sparkline {
+      height: 8px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--yellow), var(--orange), var(--pink), var(--purple));
+      opacity: .8;
+      margin-top: 8px;
+    }
+
+    @media (min-width: 420px) {
+      .cards-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      .card-surface {
+        min-height: 250px;
+      }
+      .card-title {
+        font-size: 23px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <section id="screen-title" class="screen active">
+      <div class="slide theme-title">
+        <div class="slide-head"><span>うらわ しってるかな？</span><span>PowerPointみたいなクイズ</span></div>
+        <div class="slide-body">
+          <div class="mini-banner">🗺️ たべる・みる・あそぶ を しろう！</div>
+          <div class="hero-card">
+            <div class="hero-icon">🗺️</div>
+            <h1 class="hero-title">うらわしってるかな<br>クイズ</h1>
+            <p class="hero-sub">うらわの たべもの・みるところ・あそぶところを<br>カードで たのしく しろう！</p>
+            <div class="sparkline"></div>
+          </div>
+          <div class="button-stack">
+            <button class="main-btn" onclick="goTo('screen-howto')">つぎへ</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="screen-howto" class="screen">
+      <div class="slide theme-howto">
+        <div class="slide-head"><span>あそびかた</span><span>📖 4ステップ</span></div>
+        <div class="slide-body">
+          <h2 class="section-title">あそびかた</h2>
+          <div class="rule-grid">
+            <div class="rule-card"><div class="rule-num">1</div><div class="rule-text">すきな カードを 1まい えらぶ</div></div>
+            <div class="rule-card"><div class="rule-num">2</div><div class="rule-text">クイズを よむ</div></div>
+            <div class="rule-card"><div class="rule-num">3</div><div class="rule-text">A・B・C から こたえを えらぶ</div></div>
+            <div class="rule-card"><div class="rule-num">4</div><div class="rule-text">せいかい・おしい を たのしんで、ほかの カードにも ちょうせん！</div></div>
+          </div>
+          <div class="button-stack">
+            <button class="main-btn" onclick="goTo('screen-start')">つぎへ</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="screen-start" class="screen">
+      <div class="slide theme-start">
+        <div class="slide-head"><span>カードクイズ</span><span>🎴 READY?</span></div>
+        <div class="slide-body" style="justify-content:center;">
+          <div class="hero-card">
+            <div class="hero-icon" style="background: linear-gradient(180deg,#ffd0e2,#ff9fb0);">🎴</div>
+            <h2 class="section-title">カードクイズ</h2>
+            <p class="hero-sub">すきな カードを えらんでね</p>
+          </div>
+          <button class="big-start" onclick="renderCardSelect()">START</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="screen-cards" class="screen">
+      <div class="slide theme-cards">
+        <div class="slide-head"><span>カードをえらぼう</span><span id="progress-text-top">クリア 0 / 3</span></div>
+        <div class="slide-body">
+          <div class="progress-badge" id="progress-text">クリア 0 / 3</div>
+          <div class="cards-grid" id="cards-container"></div>
+          <div class="button-stack">
+            <button class="sub-btn" onclick="resetGame()">はじめから やりなおす</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="screen-question" class="screen">
+      <div class="slide theme-question">
+        <div class="slide-head"><span id="question-progress">カードA</span><span>❓ クイズ</span></div>
+        <div class="slide-body">
+          <div class="question-panel">
+            <div class="question-frame">
+              <div class="question-image" id="question-image"></div>
+              <p class="question-text" id="question-text"></p>
+            </div>
+          </div>
+          <div class="choice-list" id="choices-container"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="screen-result" class="screen">
+      <div class="slide" id="result-slide">
+        <div class="slide-head"><span>けっか</span><span id="result-top-label">🎉</span></div>
+        <div class="slide-body">
+          <div class="result-panel" id="result-panel">
+            <div class="result-mark" id="result-mark">⭕</div>
+            <div class="result-title" id="result-title">せいかい！</div>
+            <div class="speech" id="result-message"></div>
+          </div>
+          <div class="button-stack">
+            <button class="main-btn" id="result-main-btn" onclick="renderCardSelect()">ほかのカードを ひく</button>
+            <button class="sub-btn" onclick="goTo('screen-start')">やめる（あとで）</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="screen-complete" class="screen">
+      <div class="slide theme-complete">
+        <div class="slide-head"><span>コンプリート</span><span>⭐ ぜんぶできた！</span></div>
+        <div class="slide-body" style="justify-content:center;">
+          <div class="complete-panel">
+            <div class="complete-mark">🎉</div>
+            <h2 class="complete-title">ぜんぶ できた！</h2>
+            <p class="center-note">うらわのこと、もっと しれたかな？<br>もういちど あそぶことも できるよ。</p>
+          </div>
+          <div class="button-stack">
+            <button class="main-btn" onclick="resetGame()">もういちど あそぶ</button>
+          </div>
+          <p class="footer-note">⭐ 3まい ぜんぶの カードを クリア！ ⭐</p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const quizData = [
+      {
+        id: "A",
+        label: "カードA",
+        title: "アカシエ",
+        emoji: "🍰",
+        themeClass: "card-theme-a",
+        image: "",
+        question: "<ruby>浦和<rt>うらわ</rt></ruby>で <ruby>有名<rt>ゆうめい</rt></ruby>な ケーキ<ruby>屋<rt>や</rt></ruby>さん『アカシエ』が イメージした <ruby>国<rt>くに</rt></ruby>は どれ？",
+        choices: [
+          "A フランス",
+          "B イギリス",
+          "C アメリカ"
+        ],
+        choiceBadges: ["A", "B", "C"],
+        correctIndex: 0,
+        correctMessage: "せいかいは『フランス』。オーナーシェフの <ruby>興野<rt>おきの</rt></ruby>さんは、とことん こだわって、パリの パティスリーを <ruby>表現<rt>ひょうげん</rt></ruby>したかったんだって。すてきな お<ruby>店<rt>みせ</rt></ruby>だね。",
+        wrongMessage: "おしい！ せいかいは『フランス』だよ。アカシエは、パリの パティスリーの ふんいきを めざした お<ruby>店<rt>みせ</rt></ruby>なんだって。"
+      },
+      {
+        id: "B",
+        label: "カードB",
+        title: "ときわだんご",
+        emoji: "🍡",
+        themeClass: "card-theme-b",
+        image: "",
+        question: "『ときわだんご』を つくった『<ruby>柿沼<rt>かきぬま</rt></ruby> <ruby>直次郎<rt>なおじろう</rt></ruby>』は、<ruby>浦和<rt>うらわ</rt></ruby>で <ruby>災害<rt>さいがい</rt></ruby>が <ruby>起<rt>お</rt></ruby>きた ときに、だんごを くばったんだ。その <ruby>災害<rt>さいがい</rt></ruby>は どれかな？",
+        choices: [
+          "A <ruby>火災<rt>かさい</rt></ruby>",
+          "B <ruby>地震<rt>じしん</rt></ruby>",
+          "C つなみ"
+        ],
+        choiceBadges: ["A", "B", "C"],
+        correctIndex: 0,
+        correctMessage: "<ruby>柿沼<rt>かきぬま</rt></ruby> <ruby>直次郎<rt>なおじろう</rt></ruby>は、<ruby>浦和<rt>うらわ</rt></ruby>の <ruby>大火<rt>たいか</rt></ruby>で <ruby>家<rt>いえ</rt></ruby>を なくした <ruby>人<rt>ひと</rt></ruby>たちに、<ruby>無料<rt>むりょう</rt></ruby>で おだんごを くばってくれたんだ。そこから、ときわだんごは とても <ruby>有名<rt>ゆうめい</rt></ruby>に なったんだよ。",
+        wrongMessage: "おしい！ せいかいは『<ruby>火災<rt>かさい</rt></ruby>』だよ。<ruby>浦和<rt>うらわ</rt></ruby>の <ruby>大火<rt>たいか</rt></ruby>の ときに、<ruby>無料<rt>むりょう</rt></ruby>で おだんごを くばったんだって。"
+      },
+      {
+        id: "C",
+        label: "カードC",
+        title: "うちゅうかがくかん",
+        emoji: "🚀",
+        themeClass: "card-theme-c",
+        image: "",
+        question: "<ruby>浦和<rt>うらわ</rt></ruby>に ある『うちゅうかがくかん』では、うちゅうに <ruby>行<rt>い</rt></ruby>った いきものを <ruby>見<rt>み</rt></ruby>ることが できるよ。その いきものは どれかな？",
+        choices: [
+          "A トカゲ",
+          "B ハムスター",
+          "C めだか"
+        ],
+        choiceBadges: ["A", "B", "C"],
+        correctIndex: 2,
+        correctMessage: "<ruby>浦和<rt>うらわ</rt></ruby>の うちゅうかがくかんに <ruby>行<rt>い</rt></ruby>くと、ロケットに のって うちゅうに <ruby>行<rt>い</rt></ruby>った めだかに <ruby>会<rt>あ</rt></ruby>えるよ。",
+        wrongMessage: "おしい！ せいかいは『めだか』だよ。うちゅうに <ruby>行<rt>い</rt></ruby>った めだかを <ruby>見<rt>み</rt></ruby>ることが できるんだ。",
+        questionEmoji: "🐟"
+      }
+    ];
+
+    const badgeClasses = ["badge-a", "badge-b", "badge-c"];
+    let currentCardIndex = null;
+    let completed = JSON.parse(sessionStorage.getItem("urawaQuizCompleted") || "[]");
+
+    function saveProgress() {
+      sessionStorage.setItem("urawaQuizCompleted", JSON.stringify(completed));
+    }
+
+    function goTo(screenId) {
+      document.querySelectorAll(".screen").forEach(screen => screen.classList.remove("active"));
+      document.getElementById(screenId).classList.add("active");
+    }
+
+    function renderImageSlot(target, card, fallbackEmoji, extraLabel = "") {
+      if (!target) return;
+      if (card.image) {
+        target.innerHTML = `<img src="${card.image}" alt="${card.title}">`;
+      } else {
+        target.innerHTML = `
+          <div style="text-align:center; padding:10px;">
+            <div class="placeholder-emoji">${fallbackEmoji || card.emoji || "🎴"}</div>
+            ${extraLabel ? `<div style="margin-top:8px;font-size:13px;color:#607386;font-weight:700;">${extraLabel}</div>` : ""}
+          </div>
+        `;
+      }
+    }
+
+    function renderCardSelect() {
+      if (completed.length === quizData.length) {
+        goTo("screen-complete");
+        return;
+      }
+
+      const container = document.getElementById("cards-container");
+      container.innerHTML = "";
+
+      quizData.forEach((card, index) => {
+        const done = completed.includes(card.id);
+        const button = document.createElement("button");
+        button.className = "card-item";
+        button.innerHTML = `
+          <div class="card-surface ${card.themeClass}" aria-label="${card.label}">
+            ${done ? '<div class="done-ribbon">CLEAR</div>' : ''}
+            <div class="card-top">
+              <span class="card-chip">${card.label}</span>
+            </div>
+            <div class="card-image" id="card-image-${card.id}"></div>
+            <div>
+              <p class="card-title">カードを引く</p>
+              <div class="card-sub">${done ? 'もういちど<br>ちょうせん' : 'タップして<br>ひく'}</div>
+            </div>
+          </div>
+        `;
+        button.onclick = () => openQuestion(index);
+        container.appendChild(button);
+        const target = document.getElementById(`card-image-${card.id}`);
+        if (card.image) {
+          renderImageSlot(target, card, card.emoji, "");
+        } else {
+          target.innerHTML = `
+            <div style="text-align:center; padding:8px; color:#203040; font-weight:800;">
+              <div class="card-back-symbol">${card.emoji || '🎴'}</div>
+            </div>
+          `;
+        }
+      });
+
+      const progressText = `クリア ${completed.length} / ${quizData.length}`;
+      document.getElementById("progress-text").textContent = progressText;
+      document.getElementById("progress-text-top").textContent = progressText;
+      goTo("screen-cards");
+    }
+
+    function openQuestion(index) {
+      currentCardIndex = index;
+      const card = quizData[index];
+      document.getElementById("question-progress").textContent = `${card.label} ・ ${card.title}`;
+      document.getElementById("question-text").innerHTML = card.question;
+      renderImageSlot(document.getElementById("question-image"), card, card.questionEmoji || card.emoji, "");
+
+      const choicesContainer = document.getElementById("choices-container");
+      choicesContainer.innerHTML = "";
+
+      card.choices.forEach((choice, choiceIndex) => {
+        const btn = document.createElement("button");
+        btn.className = "choice-btn";
+        btn.innerHTML = `
+          <span class="choice-badge ${badgeClasses[choiceIndex]}">${card.choiceBadges?.[choiceIndex] || String.fromCharCode(65 + choiceIndex)}</span>
+          <span class="choice-text">${choice}</span>
+        `;
+        btn.onclick = () => showResult(choiceIndex === card.correctIndex);
+        choicesContainer.appendChild(btn);
+      });
+
+      goTo("screen-question");
+    }
+
+    function showResult(isCorrect) {
+      const card = quizData[currentCardIndex];
+      const resultSlide = document.getElementById("result-slide");
+      const resultPanel = document.getElementById("result-panel");
+      const resultMark = document.getElementById("result-mark");
+      const resultTitle = document.getElementById("result-title");
+      const resultMessage = document.getElementById("result-message");
+      const resultTopLabel = document.getElementById("result-top-label");
+      const resultMainBtn = document.getElementById("result-main-btn");
+
+      resultSlide.className = "slide " + (isCorrect ? "theme-correct" : "theme-wrong");
+      resultPanel.className = "result-panel " + (isCorrect ? "correct" : "wrong");
+      resultMark.textContent = isCorrect ? "⭕" : "△";
+      resultMark.style.background = isCorrect
+        ? "linear-gradient(180deg,#f3fff0,#ffffff)"
+        : "linear-gradient(180deg,#fff7f0,#ffffff)";
+      resultTitle.textContent = isCorrect ? "せいかい！" : "おしい！";
+      resultMessage.innerHTML = isCorrect ? card.correctMessage : card.wrongMessage;
+      resultTopLabel.textContent = isCorrect ? "🎉 せいかい" : "🌼 おしい";
+      resultMainBtn.className = "main-btn";
+      resultMainBtn.textContent = completed.length + (completed.includes(card.id) ? 0 : 1) === quizData.length
+        ? "のこりのカードを みる"
+        : "ほかのカードを ひく";
+
+      if (!completed.includes(card.id)) {
+        completed.push(card.id);
+        saveProgress();
+      }
+
+      goTo("screen-result");
+    }
+
+    function resetGame() {
+      completed = [];
+      saveProgress();
+      goTo("screen-title");
+    }
+  </script>
+</body>
+</html>
