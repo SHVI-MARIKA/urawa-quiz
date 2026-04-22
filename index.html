@@ -731,9 +731,9 @@
 
     <section id="screen-cards" class="screen">
       <div class="slide theme-cards">
-        <div class="slide-head"><span>カードをえらぼう</span><span id="progress-text-top">クリア 0 / 3</span></div>
+        <div class="slide-head"><span>カードをえらぼう</span><span id="progress-text-top">クリア 0 / 4</span></div>
         <div class="slide-body">
-          <div class="progress-badge" id="progress-text">クリア 0 / 3</div>
+          <div class="progress-badge" id="progress-text">クリア 0 / 4</div>
           <div class="cards-grid" id="cards-container"></div>
           <div class="button-stack">
             <button class="sub-btn" onclick="resetGame()">はじめから やりなおす</button>
@@ -859,7 +859,26 @@
         correctMessage: "<ruby>浦和<rt>うらわ</rt></ruby>の うちゅうかがくかんに <ruby>行<rt>い</rt></ruby>くと、かつて <ruby>宇宙飛行士<rt>うちゅうひこうし</rt></ruby>と いっしょに ロケットに のって うちゅうに <ruby>行<rt>い</rt></ruby>った めだかの <ruby>子供<rt>こども</rt></ruby>たちに <ruby>会<rt>あ</rt></ruby>えるよ。",
         wrongMessage: "おしい！ せいかいは『めだか』だよ。うちゅうに <ruby>行<rt>い</rt></ruby>った めだかの <ruby>子供<rt>こども</rt></ruby>たちに <ruby>会<rt>あ</rt></ruby>えるよ。",
         questionEmoji: "🐟"
-      }
+      },
+      {
+  id: "D",
+  label: "カードD",
+  title: "イスの美術館",
+  emoji: "🪑",
+  themeClass: "card-theme-a",
+  image: "",
+  resultImage: "chair.jpg",      
+  question: "ふしぎな <ruby>形<rt>かたち</rt></ruby>の イスが たくさんあって、<br>じゆうに すわれる <ruby>場所<rt>ばしょ</rt></ruby>が あるよ。<br>すわれる イスは、いくつぐらい あるかな？<br><span style='font-size:14px;color:#607386;'>※「<ruby>脚<rt>きゃく</rt></ruby>」は イスの かぞえかただよ。</span>",
+  choices: [
+    "A 10<ruby>脚<rt>きゃく</rt></ruby>",
+    "B 20<ruby>脚<rt>きゃく</rt></ruby>",
+    "C 40<ruby>脚<rt>きゃく</rt></ruby>"
+  ],
+  choiceBadges: ["A", "B", "C"],
+  correctIndex: 2,
+  correctMessage: "せいかいは『40<ruby>脚<rt>きゃく</rt></ruby>』。<br>さいたま<ruby>県立近代美術館<rt>けんりつきんだいびじゅつかん</rt></ruby>には、40<ruby>脚以上<rt>きゃくいじょう</rt></ruby>の グッドデザインな イスが てんじ されていて、じゆうに すわることが できるよ。<br>『イスの <ruby>美術館<rt>びじゅつかん</rt></ruby>』とも よばれているんだ。",
+  wrongMessage: "おしい！ せいかいは『40<ruby>脚<rt>きゃく</rt></ruby>』だよ。<br>さいたま<ruby>県立近代美術館<rt>けんりつきんだいびじゅつかん</rt></ruby>には、40<ruby>脚以上<rt>きゃくいじょう</rt></ruby>の イスが あって、じゆうに すわることが できるんだ。"
+}
     ];
 
     const badgeClasses = ["badge-a", "badge-b", "badge-c"];
