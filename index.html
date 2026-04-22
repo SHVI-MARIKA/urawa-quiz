@@ -783,11 +783,13 @@
           <div class="complete-panel">
             <div class="complete-mark">🎉</div>
             <h2 class="complete-title">ぜんぶ できた！</h2>
-            <p class="center-note">うらわのこと、もっと しれたかな？<br>おわったら アンケートに もどってね。</p>
+            <p class="center-note"> つぎに なにをする？<br>えらんで すすんでね。</p>
           </div>
           <div class="button-stack">
-            <button class="main-btn" onclick="openForm()">アンケートに もどる</button>
-            <button class="sub-btn" onclick="resetGame()">もういちど あそぶ</button>
+                  <button class="main-btn" onclick="goTo('screen-extra-quiz')">もっと知りたい！<br>追加クイズに すすむ</button>
+                  <button class="sub-btn" onclick="goTo('screen-go-place')">行ってみたい場所を えらぶ</button>
+                  <button class="sub-btn" onclick="openForm()">アンケートに もどる</button>
+                  <button class="sub-btn" onclick="goTo('screen-start')">クイズを おわる</button>
           </div>
           <p class="footer-note">⭐ 4まい ぜんぶの カードを クリア！ ⭐</p>
         </div>
@@ -795,6 +797,46 @@
     </section>
   </div>
 
+  <section id="screen-extra-quiz" class="screen">
+  <div class="slide theme-question">
+    <div class="slide-head"><span>ついかクイズ</span><span>✨ もっと知りたい！</span></div>
+    <div class="slide-body" style="justify-content:center;">
+      <div class="complete-panel">
+        <h2 class="complete-title">ついかクイズ</h2>
+        <p class="center-note">
+          ここに アカシエ・だんご・うちゅうかがくかん の<br>
+          ついかクイズを いれていく
+        </p>
+      </div>
+      <div class="button-stack">
+        <button class="main-btn" onclick="goTo('screen-go-place')">行ってみたい場所を えらぶ</button>
+        <button class="sub-btn" onclick="goTo('screen-complete')">もどる</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+  <section id="screen-go-place" class="screen">
+  <div class="slide theme-complete">
+    <div class="slide-head"><span>行ってみたい</span><span>📍 えらんでみよう</span></div>
+    <div class="slide-body" style="justify-content:center;">
+      <div class="complete-panel">
+        <h2 class="complete-title">いちばん 行ってみたいのは どれ？</h2>
+        <p class="center-note">1つ えらんでね。</p>
+      </div>
+
+      <div class="button-stack">
+        <button class="main-btn" onclick="selectGoPlace('アカシエ')">アカシエ</button>
+        <button class="sub-btn" onclick="selectGoPlace('ときわだんご')">ときわだんご</button>
+        <button class="sub-btn" onclick="selectGoPlace('宇宙科学館')">宇宙科学館</button>
+        <button class="sub-btn" onclick="goTo('screen-complete')">もどる</button>
+      </div>
+
+      <p class="center-note" id="go-place-result" style="margin-top:10px;"></p>
+    </div>
+  </div>
+</section>
+  
   <script>
     const FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSfIY2AEBwZIn9G-0DNYD9Ua2iORkuYLsAG6FDj_WHY0AbjUPg/viewform";
 
@@ -1023,6 +1065,13 @@
       saveProgress();
       goTo("screen-title");
     }
+
+    let selectedGoPlace = "";
+
+function selectGoPlace(place) {
+  selectedGoPlace = place;
+  document.getElementById("go-place-result").textContent = `「${place}」を えらんだよ！`;
+}
   </script>
 </body>
 </html>
