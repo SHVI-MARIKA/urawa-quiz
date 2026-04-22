@@ -681,13 +681,13 @@
   <div class="app">
     <section id="screen-title" class="screen active">
       <div class="slide theme-title">
-        <div class="slide-head"><span>うらわ しってるかな？</span><span>PowerPointみたいなクイズ</span></div>
+        <div class="slide-head"><span>うらわ しってるかな？</span><span></span></div>
         <div class="slide-body">
           <div class="mini-banner">🗺️ たべる・みる・あそぶ を しろう！</div>
           <div class="hero-card">
             <div class="hero-icon">🗺️</div>
             <h1 class="hero-title">うらわしってるかな<br>クイズ</h1>
-            <p class="hero-sub">うらわの たべもの・みるところ・あそぶところを<br>カードで たのしく しろう！</p>
+            <p class="hero-sub">うらわの たべもの・みるところ・あそぶところを<br>クイズで たのしく しろう！</p>
             <div class="sparkline"></div>
           </div>
           <div class="button-stack">
@@ -789,7 +789,7 @@
             <button class="main-btn" onclick="openForm()">アンケートに もどる</button>
             <button class="sub-btn" onclick="resetGame()">もういちど あそぶ</button>
           </div>
-          <p class="footer-note">⭐ 3まい ぜんぶの カードを クリア！ ⭐</p>
+          <p class="footer-note">⭐ 4まい ぜんぶの カードを クリア！ ⭐</p>
         </div>
       </div>
     </section>
@@ -805,22 +805,22 @@
     const quizData = [
       {
         id: "A",
-        label: "カードA",
-        title: "アカシエ",
-        emoji: "🍰",
-        themeClass: "card-theme-a",
-        image: "",
-        question: "<ruby>浦和<rt>うらわ</rt></ruby>で <ruby>有名<rt>ゆうめい</rt></ruby>な ケーキ<ruby>屋<rt>や</rt></ruby>さん『アカシエ』が イメージした <ruby>国<rt>くに</rt></ruby>は どれ？",
-        choices: [
-          "A フランス",
-          "B イギリス",
-          "C アメリカ"
-        ],
-        choiceBadges: ["A", "B", "C"],
-        correctIndex: 0,
-        correctMessage: "せいかいは『フランス』。オーナーシェフの <ruby>興野<rt>おきの</rt></ruby>さんは、とことん こだわって、パリの パティスリーを <ruby>表現<rt>ひょうげん</rt></ruby>したかったんだって。すてきな お<ruby>店<rt>みせ</rt></ruby>だね。",
-        wrongMessage: "おしい！ せいかいは『フランス』だよ。アカシエは、パリの パティスリーの ふんいきを めざした お<ruby>店<rt>みせ</rt></ruby>なんだって。"
-      },
+  label: "カードA",
+  title: "アカシエ",
+  emoji: "🍰",
+  themeClass: "card-theme-a",
+  image: "",
+  question: "<ruby>浦和<rt>うらわ</rt></ruby>の ケーキ<ruby>屋<rt>や</rt></ruby>さん『アカシエ』の ケーキ『アントワネット』は、フランスの お<ruby>姫<rt>ひめ</rt></ruby>さま、マリー・アントワネットを イメージしているよ。このケーキの<ruby>大<rt>おお</rt></ruby>きさは どのくらいかな？",
+  choices: [
+    "A 5センチ",
+    "B 7センチ",
+    "C 10センチ"
+  ],
+  choiceBadges: ["A", "B", "C"],
+  correctIndex: 2,
+  correctMessage: "せいかい！ アントワネットは、ほかの ケーキの 2<ruby>倍<rt>ばい</rt></ruby>の <ruby>大<rt>おお</rt></ruby>きさなんだって。<ruby>一度<rt>いちど</rt></ruby> <ruby>食<rt>た</rt></ruby>べてみたいね。",
+  wrongMessage: "おしい！ せいかいは 10センチだよ。アントワネットは、ほかの ケーキの 2<ruby>倍<rt>ばい</rt></ruby>の <ruby>大<rt>おお</rt></ruby>きさなんだって。<ruby>一度<rt>いちど</rt></ruby> <ruby>食<rt>た</rt></ruby>べてみたいね。"
+},
       {
         id: "B",
         label: "カードB",
