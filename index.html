@@ -664,6 +664,13 @@
       margin-top: 8px;
     }
 
+    .go-place-btn.selected {
+  background: linear-gradient(180deg, var(--blue), var(--blue-deep));
+  color: white;
+  border-color: transparent;
+  box-shadow: var(--shadow-soft);
+}
+
     @media (min-width: 420px) {
       .cards-grid {
         grid-template-columns: repeat(3, 1fr);
@@ -826,9 +833,9 @@
       </div>
 
       <div class="button-stack">
-        <button class="main-btn" onclick="selectGoPlace('アカシエ')">アカシエ</button>
-        <button class="sub-btn" onclick="selectGoPlace('ときわだんご')">ときわだんご</button>
-        <button class="sub-btn" onclick="selectGoPlace('宇宙科学館')">宇宙科学館</button>
+        <button class="sub-btn go-place-btn" data-place="アカシエ" onclick="selectGoPlace('アカシエ', this)">アカシエ</button>
+        <button class="sub-btn go-place-btn" data-place="ときわだんご" onclick="selectGoPlace('ときわだんご', this)">ときわだんご</button>
+        <button class="sub-btn go-place-btn" data-place="宇宙科学館" onclick="selectGoPlace('宇宙科学館', this)">宇宙科学館</button>
         <button class="sub-btn" onclick="goTo('screen-complete')">もどる</button>
       </div>
 
@@ -1066,11 +1073,18 @@
       goTo("screen-title");
     }
 
-    let selectedGoPlace = "";
+   let selectedGoPlace = "";
 
-function selectGoPlace(place) {
+function selectGoPlace(place, buttonEl) {
   selectedGoPlace = place;
-  document.getElementById("go-place-result").textContent = `「${place}」を えらんだよ！`;
+
+  document.querySelectorAll(".go-place-btn").forEach(btn => {
+    btn.classList.remove("selected");
+  });
+
+  buttonEl.classList.add("selected");
+
+  document.getElementById("go-place-result").textContent = `「${selectedGoPlace}」を えらんだよ！`;
 }
   </script>
 </body>
