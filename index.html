@@ -671,6 +671,15 @@
   box-shadow: var(--shadow-soft);
 }
 
+    .go-place-btn.selected,
+    .go-when-btn.selected,
+    .go-purpose-btn.selected {
+  background: linear-gradient(180deg, var(--blue), var(--blue-deep));
+  color: white;
+  border-color: transparent;
+  box-shadow: var(--shadow-soft);
+}
+
     @media (min-width: 420px) {
       .cards-grid {
         grid-template-columns: repeat(3, 1fr);
@@ -839,7 +848,88 @@
         <button class="sub-btn" onclick="goTo('screen-complete')">もどる</button>
       </div>
 
+       <div class="button-stack">
+        <button class="main-btn" onclick="goToWhenScreen()">つぎへ</button>
+        <button class="sub-btn" onclick="goTo('screen-complete')">もどる</button>
+      </div>
+
       <p class="center-note" id="go-place-result" style="margin-top:10px;"></p>
+    </div>
+  </div>
+</section>
+
+  <section id="screen-go-when" class="screen">
+  <div class="slide theme-complete">
+    <div class="slide-head"><span>いつ行きたい？</span><span>🗓️ えらんでね</span></div>
+    <div class="slide-body" style="justify-content:center;">
+      <div class="complete-panel">
+        <h2 class="complete-title">いつ 行きたい？</h2>
+        <p class="center-note">1つ えらんでね。</p>
+      </div>
+
+      <div class="button-stack">
+        <button class="sub-btn go-when-btn" onclick="selectGoWhen('GW', this)">GW</button>
+        <button class="sub-btn go-when-btn" onclick="selectGoWhen('今週末', this)">今週末</button>
+        <button class="sub-btn go-when-btn" onclick="selectGoWhen('夏休み', this)">夏休み</button>
+        <button class="sub-btn go-when-btn" onclick="selectGoWhen('今度いつか', this)">今度いつか</button>
+      </div>
+
+      <div class="button-stack">
+        <button class="main-btn" onclick="goToPurposeScreen()">つぎへ</button>
+        <button class="sub-btn" onclick="goTo('screen-go-place')">もどる</button>
+      </div>
+
+      <p class="center-note" id="go-when-result" style="margin-top:10px;"></p>
+    </div>
+  </div>
+</section>
+
+  <section id="screen-go-purpose" class="screen">
+  <div class="slide theme-complete">
+    <div class="slide-head"><span>なにしたい？</span><span>✨ えらんでね</span></div>
+    <div class="slide-body" style="justify-content:center;">
+      <div class="complete-panel">
+        <h2 class="complete-title">行って なにしたい？</h2>
+        <p class="center-note">1つ えらんでね。</p>
+      </div>
+
+      <div class="button-stack">
+        <button class="sub-btn go-purpose-btn" onclick="selectGoPurpose('みたい', this)">みたい</button>
+        <button class="sub-btn go-purpose-btn" onclick="selectGoPurpose('たべたい', this)">たべたい</button>
+        <button class="sub-btn go-purpose-btn" onclick="selectGoPurpose('あそびたい', this)">あそびたい</button>
+        <button class="sub-btn go-purpose-btn" onclick="selectGoPurpose('かいたい', this)">かいたい</button>
+      </div>
+
+      <div class="button-stack">
+        <button class="main-btn" onclick="finishGoBox()">BOXに いれる</button>
+        <button class="sub-btn" onclick="goTo('screen-go-when')">もどる</button>
+      </div>
+
+      <p class="center-note" id="go-purpose-result" style="margin-top:10px;"></p>
+    </div>
+  </div>
+</section>
+
+  <section id="screen-go-box" class="screen">
+  <div class="slide theme-complete">
+    <div class="slide-head"><span>行きたいBOX</span><span>📦 はいったよ！</span></div>
+    <div class="slide-body" style="justify-content:center;">
+      <div class="complete-panel">
+        <h2 class="complete-title">行きたいBOXに いれたよ！</h2>
+        <p class="center-note">えらんだ ないようは これだよ。</p>
+
+        <div id="go-box-card" style="margin-top:18px; display:grid; gap:10px;">
+          <div class="speech" id="go-box-place"></div>
+          <div class="speech" id="go-box-when"></div>
+          <div class="speech" id="go-box-purpose"></div>
+        </div>
+      </div>
+
+      <div class="button-stack">
+        <button class="main-btn" onclick="resetGoFlow()">もう1つ えらぶ</button>
+        <button class="sub-btn" onclick="resetGame()">クイズを おわる</button>
+        <button class="sub-btn" onclick="goTo('screen-complete')">コンプリート画面に もどる</button>
+      </div>
     </div>
   </div>
 </section>
@@ -1073,18 +1163,80 @@
       goTo("screen-title");
     }
 
-   let selectedGoPlace = "";
+  let selectedGoPlace = "";
+let selectedGoWhen = "";
+let selectedGoPurpose = "";
+
+function clearSelected(className) {
+  document.querySelectorAll(className).forEach(btn => {
+    btn.classList.remove("selected");
+  });
+}
 
 function selectGoPlace(place, buttonEl) {
   selectedGoPlace = place;
-
-  document.querySelectorAll(".go-place-btn").forEach(btn => {
-    btn.classList.remove("selected");
-  });
-
+  clearSelected(".go-place-btn");
   buttonEl.classList.add("selected");
+  document.getElementById("go-place-result").textContent = `「${place}」を えらんだよ！`;
+}
 
-  document.getElementById("go-place-result").textContent = `「${selectedGoPlace}」を えらんだよ！`;
+function goToWhenScreen() {
+  if (!selectedGoPlace) {
+    document.getElementById("go-place-result").textContent = "1つ えらんでから つぎへ いってね。";
+    return;
+  }
+  goTo("screen-go-when");
+}
+
+function selectGoWhen(whenText, buttonEl) {
+  selectedGoWhen = whenText;
+  clearSelected(".go-when-btn");
+  buttonEl.classList.add("selected");
+  document.getElementById("go-when-result").textContent = `「${whenText}」に 行きたいね！`;
+}
+
+function goToPurposeScreen() {
+  if (!selectedGoWhen) {
+    document.getElementById("go-when-result").textContent = "1つ えらんでから つぎへ いってね。";
+    return;
+  }
+  goTo("screen-go-purpose");
+}
+
+function selectGoPurpose(purpose, buttonEl) {
+  selectedGoPurpose = purpose;
+  clearSelected(".go-purpose-btn");
+  buttonEl.classList.add("selected");
+  document.getElementById("go-purpose-result").textContent = `「${purpose}」を えらんだよ！`;
+}
+
+function finishGoBox() {
+  if (!selectedGoPurpose) {
+    document.getElementById("go-purpose-result").textContent = "1つ えらんでから BOXに いれてね。";
+    return;
+  }
+
+  document.getElementById("go-box-place").textContent = selectedGoPlace;
+  document.getElementById("go-box-when").textContent = selectedGoWhen;
+  document.getElementById("go-box-purpose").textContent = selectedGoPurpose;
+
+  goTo("screen-go-box");
+}
+
+function resetGoFlow() {
+  selectedGoPlace = "";
+  selectedGoWhen = "";
+  selectedGoPurpose = "";
+
+  clearSelected(".go-place-btn");
+  clearSelected(".go-when-btn");
+  clearSelected(".go-purpose-btn");
+
+  document.getElementById("go-place-result").textContent = "";
+  document.getElementById("go-when-result").textContent = "";
+  document.getElementById("go-purpose-result").textContent = "";
+
+  goTo("screen-go-place");
 }
   </script>
 </body>
