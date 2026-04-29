@@ -812,25 +812,67 @@
       </div>
     </section>
 
-  <section id="screen-extra-quiz" class="screen">
+<section id="screen-extra-quiz" class="screen">
   <div class="slide theme-question">
-    <div class="slide-head"><span>ついかクイズ</span><span>✨ もっと知りたい！</span></div>
-    <div class="slide-body" style="justify-content:center;">
-      <div class="complete-panel">
-        <h2 class="complete-title">ついかクイズ</h2>
-        <p class="center-note">
-          ここに アカシエ・だんご・うちゅうかがくかん の<br>
-          ついかクイズを いれていく
-        </p>
+    <div class="slide-head"><span>ついかクイズ</span><span>🚀 もっと知りたい！</span></div>
+    <div class="slide-body">
+      <div class="question-panel">
+        <div class="question-frame">
+          <div class="question-image">
+            <div class="placeholder-emoji">🚀</div>
+          </div>
+
+          <p class="question-text">
+            宇宙科学館には、ボールをころがして、星のまわりを通るような動きをためせる展示があるよ。<br>
+            ボールがうまく進むと、どんな形に近い動きになるかな？
+          </p>
+        </div>
       </div>
+
+      <div class="choice-list">
+        <button class="choice-btn" onclick="answerExtraQuiz(false)">
+          <span class="choice-badge badge-a">A</span>
+          <span class="choice-text">まっすぐだけ進む</span>
+        </button>
+
+        <button class="choice-btn" onclick="answerExtraQuiz(true)">
+          <span class="choice-badge badge-b">B</span>
+          <span class="choice-text">8の字のように動く</span>
+        </button>
+
+        <button class="choice-btn" onclick="answerExtraQuiz(false)">
+          <span class="choice-badge badge-c">C</span>
+          <span class="choice-text">その場で止まる</span>
+        </button>
+      </div>
+
       <div class="button-stack">
-        <button class="main-btn" onclick="goTo('screen-go-place')">行ってみたい場所を えらぶ</button>
         <button class="sub-btn" onclick="goTo('screen-complete')">もどる</button>
       </div>
     </div>
   </div>
 </section>
 
+<section id="screen-extra-result" class="screen">
+  <div class="slide" id="extra-result-slide">
+    <div class="slide-head"><span>ついかクイズのけっか</span><span id="extra-result-top-label">🎉</span></div>
+    <div class="slide-body">
+      <div class="result-panel" id="extra-result-panel">
+        <div class="result-mark" id="extra-result-mark">⭕</div>
+        <div class="result-title" id="extra-result-title">せいかい！</div>
+
+        <div class="speech" id="extra-result-message"></div>
+      </div>
+
+      <div class="button-stack">
+        <button class="main-btn" onclick="goTo('screen-go-place')">行ってみたい場所を えらぶ</button>
+        <button class="sub-btn" onclick="goTo('screen-complete')">コンプリート画面に もどる</button>
+        <button class="sub-btn" onclick="openForm()">アンケートに もどる</button>
+      </div>
+    </div>
+  </div>
+</section>
+    
   <section id="screen-go-place" class="screen">
   <div class="slide theme-complete">
     <div class="slide-head"><span>行ってみたい</span><span>📍 えらんでみよう</span></div>
@@ -1171,6 +1213,39 @@ function clearSelected(className) {
   document.querySelectorAll(className).forEach(btn => {
     btn.classList.remove("selected");
   });
+}
+
+    function answerExtraQuiz(isCorrect) {
+  const slide = document.getElementById("extra-result-slide");
+  const panel = document.getElementById("extra-result-panel");
+  const mark = document.getElementById("extra-result-mark");
+  const title = document.getElementById("extra-result-title");
+  const topLabel = document.getElementById("extra-result-top-label");
+  const message = document.getElementById("extra-result-message");
+
+  if (isCorrect) {
+    slide.className = "slide theme-correct";
+    panel.className = "result-panel correct";
+    mark.textContent = "⭕";
+    title.textContent = "せいかい！";
+    topLabel.textContent = "🎉";
+    message.innerHTML =
+      "ボールが星の近くを通ると、進む向きが変わるよ。<br>" +
+      "宇宙の探査機も、星の力を使って進む向きを変えることがあるんだ。<br>" +
+      "こういう進み方を「スイングバイ」というよ。";
+  } else {
+    slide.className = "slide theme-wrong";
+    panel.className = "result-panel wrong";
+    mark.textContent = "💡";
+    title.textContent = "おしい！";
+    topLabel.textContent = "もう一回考えてみよう";
+    message.innerHTML =
+      "せいかいは、Bの「8の字のように動く」だよ。<br>" +
+      "ボールが星の近くを通ると、進む向きが変わるんだ。<br>" +
+      "宇宙科学館で、ほんとうにボールをころがしてためしてみたいね。";
+  }
+
+  goTo("screen-extra-result");
 }
 
 function selectGoPlace(place, buttonEl) {
