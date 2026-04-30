@@ -873,6 +873,50 @@
   </div>
 </section>
 
+<section id="screen-extra-quiz-acacie" class="screen">
+  <div class="slide theme-question">
+    <div class="slide-head"><span>アカシエクイズ</span><span>🍰 もっと知りたい！</span></div>
+    <div class="slide-body">
+      <div class="question-panel">
+        <div class="question-frame">
+          <div class="question-image">
+            <div class="placeholder-emoji">🍓</div>
+          </div>
+
+          <p class="question-text">
+            アカシエには、埼玉県でしか栽培されていない
+            プレミアム苺「あまりん」を使った
+            期間限定のケーキがあるよ。<br><br>
+            「あまりん」をたっぷりと4段重ねにした
+            ケーキの名前はどれかな？
+          </p>
+        </div>
+      </div>
+
+      <div class="choice-list">
+        <button class="choice-btn" onclick="answerExtraQuizAcacie(true)">
+          <span class="choice-badge badge-a">A</span>
+          <span class="choice-text">あまりんのすごいショートケーキ</span>
+        </button>
+
+        <button class="choice-btn" onclick="answerExtraQuizAcacie(false)">
+          <span class="choice-badge badge-b">B</span>
+          <span class="choice-text">あまりんのおいしいショートケーキ</span>
+        </button>
+
+        <button class="choice-btn" onclick="answerExtraQuizAcacie(false)">
+          <span class="choice-badge badge-c">C</span>
+          <span class="choice-text">あまりんのかわいいショートケーキ</span>
+        </button>
+      </div>
+
+      <div class="button-stack">
+        <button class="sub-btn" onclick="goTo('screen-extra-quiz')">追加クイズ選択に もどる</button>
+      </div>
+    </div>
+  </div>
+</section>
+    
 <section id="screen-extra-result" class="screen">
   <div class="slide" id="extra-result-slide">
     <div class="slide-head"><span>ついかクイズのけっか</span><span id="extra-result-top-label">🎉</span></div>
@@ -1263,6 +1307,41 @@ function clearSelected(className) {
       "せいかいは、Bの「8の字のように動く」だよ。<br>" +
       "ボールが星の近くを通ると、進む向きが変わるんだ。<br>" +
       "宇宙科学館で、ほんとうにボールをころがしてためしてみたいね。";
+  }
+
+  goTo("screen-extra-result");
+}
+
+    function answerExtraQuizAcacie(isCorrect) {
+  const slide = document.getElementById("extra-result-slide");
+  const panel = document.getElementById("extra-result-panel");
+  const mark = document.getElementById("extra-result-mark");
+  const title = document.getElementById("extra-result-title");
+  const topLabel = document.getElementById("extra-result-top-label");
+  const message = document.getElementById("extra-result-message");
+
+  if (isCorrect) {
+    slide.className = "slide theme-correct";
+    panel.className = "result-panel correct";
+    mark.textContent = "⭕";
+    title.textContent = "せいかい！";
+    topLabel.textContent = "🎉";
+    message.innerHTML =
+      "「あまりんのすごいショートケーキ」だよ。<br><br>" +
+      "埼玉県でしか栽培されていないプレミアム苺「あまりん」を、<br>" +
+      "たっぷり4段重ねにしたケーキなんだって。<br><br>" +
+      "期間限定だから、見つけたらラッキーかも！";
+  } else {
+    slide.className = "slide theme-wrong";
+    panel.className = "result-panel wrong";
+    mark.textContent = "💡";
+    title.textContent = "おしい！";
+    topLabel.textContent = "もう一回考えてみよう";
+    message.innerHTML =
+      "せいかいは、<br>" +
+      "「あまりんのすごいショートケーキ」だよ。<br><br>" +
+      "名前からして、ちょっと食べてみたくなるね。<br>" +
+      "期間限定のケーキなんだって。";
   }
 
   goTo("screen-extra-result");
