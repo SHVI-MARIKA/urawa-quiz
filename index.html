@@ -823,7 +823,7 @@
 
       <div class="button-stack">
         <button class="sub-btn" onclick="goTo('screen-extra-quiz-acacie')">🍰 アカシエ</button>
-        <button class="sub-btn" onclick="goTo('screen-extra-quiz-dango')">🍡 ときわだんご</button>
+       <button class="sub-btn" onclick="goTo('screen-extra-quiz-dango')">🍡 ときわだんご</button>
         <button class="sub-btn" onclick="goTo('screen-extra-quiz-space')">🚀 宇宙科学館</button>
         <button class="sub-btn" onclick="goTo('screen-complete')">もどる</button>
       </div>
@@ -907,6 +907,51 @@
         <button class="choice-btn" onclick="answerExtraQuizAcacie(false)">
           <span class="choice-badge badge-c">C</span>
           <span class="choice-text">あまりんのかわいいショートケーキ</span>
+        </button>
+      </div>
+
+      <div class="button-stack">
+        <button class="sub-btn" onclick="goTo('screen-extra-quiz')">追加クイズ選択に もどる</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+    <section id="screen-extra-quiz-dango" class="screen">
+  <div class="slide theme-question">
+    <div class="slide-head"><span>ときわだんごクイズ</span><span>🍡 もっと知りたい！</span></div>
+    <div class="slide-body">
+      <div class="question-panel">
+        <div class="question-frame">
+          <div class="question-image">
+            <div class="placeholder-emoji">🍡</div>
+          </div>
+
+          <p class="question-text">
+            ときわだんご本舗の「ときわだんご」は、
+            無添加なので、時間がたつと
+            少しずつ固くなっていくんだって。<br><br>
+            おみやげで買ったときは、
+            やわらかいうちに食べてほしいから、
+            何時間以内に食べるようにお願いしているかな？
+          </p>
+        </div>
+      </div>
+
+      <div class="choice-list">
+        <button class="choice-btn" onclick="answerExtraQuizDango(true)">
+          <span class="choice-badge badge-a">A</span>
+          <span class="choice-text">5時間以内</span>
+        </button>
+
+        <button class="choice-btn" onclick="answerExtraQuizDango(false)">
+          <span class="choice-badge badge-b">B</span>
+          <span class="choice-text">24時間以内</span>
+        </button>
+
+        <button class="choice-btn" onclick="answerExtraQuizDango(false)">
+          <span class="choice-badge badge-c">C</span>
+          <span class="choice-text">3日以内</span>
         </button>
       </div>
 
@@ -1342,6 +1387,41 @@ function clearSelected(className) {
       "「あまりんのすごいショートケーキ」だよ。<br><br>" +
       "名前からして、ちょっと食べてみたくなるね。<br>" +
       "期間限定のケーキなんだって。";
+  }
+
+  goTo("screen-extra-result");
+}
+
+    function answerExtraQuizDango(isCorrect) {
+  const slide = document.getElementById("extra-result-slide");
+  const panel = document.getElementById("extra-result-panel");
+  const mark = document.getElementById("extra-result-mark");
+  const title = document.getElementById("extra-result-title");
+  const topLabel = document.getElementById("extra-result-top-label");
+  const message = document.getElementById("extra-result-message");
+
+  if (isCorrect) {
+    slide.className = "slide theme-correct";
+    panel.className = "result-panel correct";
+    mark.textContent = "⭕";
+    title.textContent = "せいかい！";
+    topLabel.textContent = "🎉";
+    message.innerHTML =
+      "おみやげで買ったときは、<br>" +
+      "5時間以内に食べるようにお願いしているんだって。<br><br>" +
+      "作りたてがいちばんおいしいから、<br>" +
+      "できれば喫茶で食べるのもおすすめなんだね。";
+  } else {
+    slide.className = "slide theme-wrong";
+    panel.className = "result-panel wrong";
+    mark.textContent = "💡";
+    title.textContent = "おしい！";
+    topLabel.textContent = "もう一回考えてみよう";
+    message.innerHTML =
+      "せいかいは、5時間以内だよ。<br><br>" +
+      "ときわだんごは無添加なので、<br>" +
+      "時間がたつと固くなっていくんだって。<br>" +
+      "やわらかいうちに食べてみたいね。";
   }
 
   goTo("screen-extra-result");
