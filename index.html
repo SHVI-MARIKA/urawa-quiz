@@ -680,6 +680,66 @@
   box-shadow: 0 6px 14px rgba(255, 199, 70, 0.22);
 }
 
+    .go-ticket-card {
+  margin-top: 18px;
+  background: linear-gradient(180deg, #fff9df, #ffffff);
+  border: 3px dashed rgba(255, 181, 107, 0.75);
+  border-radius: 24px;
+  padding: 18px 16px;
+  box-shadow: var(--shadow-soft);
+  text-align: left;
+  position: relative;
+}
+
+.go-ticket-card::before,
+.go-ticket-card::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 22px;
+  height: 22px;
+  background: #fffef5;
+  border-radius: 50%;
+  transform: translateY(-50%);
+}
+
+.go-ticket-card::before {
+  left: -12px;
+}
+
+.go-ticket-card::after {
+  right: -12px;
+}
+
+.ticket-label {
+  text-align: center;
+  font-size: 20px;
+  font-weight: 900;
+  color: #d9822b;
+  margin-bottom: 14px;
+}
+
+.ticket-row {
+  background: white;
+  border: 2px solid rgba(255, 181, 107, 0.28);
+  border-radius: 18px;
+  padding: 12px 14px;
+  margin-top: 10px;
+  display: grid;
+  gap: 4px;
+}
+
+.ticket-small {
+  font-size: 13px;
+  color: var(--sub);
+  font-weight: 800;
+}
+
+.ticket-row strong {
+  font-size: 22px;
+  color: var(--ink);
+}
+
     @media (min-width: 420px) {
       .cards-grid {
         grid-template-columns: repeat(3, 1fr);
@@ -1051,7 +1111,7 @@
       </div>
 
       <div class="button-stack">
-        <button class="main-btn" onclick="finishGoBox()">BOXに いれる</button>
+        <button class="main-btn" onclick="finishGoBox()">チケットを つくる</button>
         <button class="sub-btn" onclick="goTo('screen-go-when')">もどる</button>
       </div>
 
@@ -1062,21 +1122,33 @@
 
   <section id="screen-go-box" class="screen">
   <div class="slide theme-complete">
-    <div class="slide-head"><span>行きたいBOX</span><span>📦 はいったよ！</span></div>
+    <div class="slide-head"><span>行きたいチケット</span><span>🎟️ できたよ！</span></div>
     <div class="slide-body" style="justify-content:center;">
       <div class="complete-panel">
-        <h2 class="complete-title">行きたいBOXに いれたよ！</h2>
-        <p class="center-note">えらんだ ないようは これだよ。</p>
+        <h2 class="complete-title">行きたいチケットが できたよ！</h2>
+        <p class="center-note">おうちの人に 見せてみよう。</p>
 
-        <div id="go-box-card" style="margin-top:18px; display:grid; gap:10px;">
-          <div class="speech" id="go-box-place"></div>
-          <div class="speech" id="go-box-when"></div>
-          <div class="speech" id="go-box-purpose"></div>
-        </div>
-      </div>
+        <div id="go-box-card" class="go-ticket-card">
+  <div class="ticket-label">🎟️ 行きたいチケット</div>
+
+  <div class="ticket-row">
+    <span class="ticket-small">ばしょ</span>
+    <strong id="go-box-place"></strong>
+  </div>
+
+  <div class="ticket-row">
+    <span class="ticket-small">いつ</span>
+    <strong id="go-box-when"></strong>
+  </div>
+
+  <div class="ticket-row">
+    <span class="ticket-small">したいこと</span>
+    <strong id="go-box-purpose"></strong>
+  </div>
+</div>
 
       <div class="button-stack">
-        <button class="main-btn" onclick="resetGoFlow()">もう1つ えらぶ</button>
+        <button class="main-btn" onclick="resetGoFlow()">もう1まい つくる</button>
         <button class="sub-btn" onclick="resetGame()">クイズを おわる</button>
         <button class="sub-btn" onclick="goTo('screen-complete')">コンプリート画面に もどる</button>
       </div>
