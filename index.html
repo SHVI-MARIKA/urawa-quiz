@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+  <!DOCTYPE html>
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
@@ -1174,26 +1174,8 @@
         <h2 class="complete-title">行きたいばしょに とうろくしたよ！</h2>
         <p class="center-note">おうちの人に 見せてみよう。</p>
 
-        <div id="go-box-card" class="go-ticket-card">
-          <h3 class="go-list-title">いまの 行きたいところ</h3>
+         <h3 class="go-list-title">いまの 行きたいところ</h3>
 <div id="go-list" class="go-list"></div>
-  <div class="ticket-label">📍 行きたいところ</div>
-
-  <div class="ticket-row">
-    <span class="ticket-small">ばしょ</span>
-    <strong id="go-box-place"></strong>
-  </div>
-
-  <div class="ticket-row">
-    <span class="ticket-small">いつ</span>
-    <strong id="go-box-when"></strong>
-  </div>
-
-  <div class="ticket-row">
-    <span class="ticket-small">したいこと</span>
-    <strong id="go-box-purpose"></strong>
-  </div>
-</div>
 
       <div class="button-stack">
         <button class="main-btn" onclick="resetGoFlow()">もうひとつ とうろくする</button>
@@ -1606,10 +1588,6 @@ function finishGoBox() {
   };
 
   goList.push(newItem);
-
-  document.getElementById("go-box-place").textContent = selectedGoPlace;
-  document.getElementById("go-box-when").textContent = selectedGoWhen;
-  document.getElementById("go-box-purpose").textContent = selectedGoPurpose;
 
   renderGoList();
 
