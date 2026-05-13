@@ -691,6 +691,44 @@
   position: relative;
 }
 
+.go-list {
+  margin-top: 18px;
+  display: grid;
+  gap: 10px;
+}
+
+.go-list-title {
+  text-align: center;
+  font-size: 20px;
+  font-weight: 900;
+  color: #d9822b;
+  margin: 18px 0 8px;
+}
+
+.go-list-item {
+  background: white;
+  border: 2px solid rgba(255, 181, 107, 0.35);
+  border-radius: 18px;
+  padding: 12px 14px;
+  box-shadow: var(--shadow-soft);
+  text-align: left;
+}
+
+.go-list-item strong {
+  display: block;
+  font-size: 20px;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+
+.go-list-item span {
+  display: block;
+  font-size: 15px;
+  color: var(--sub);
+  line-height: 1.6;
+  font-weight: 700;
+}
+    
 .go-ticket-card::before,
 .go-ticket-card::after {
   content: "";
@@ -863,7 +901,7 @@
           </div>
           <div class="button-stack">
                   <button class="main-btn" onclick="goTo('screen-extra-quiz')">もっと知りたい！<br>追加クイズに すすむ</button>
-                  <button class="sub-btn" onclick="goTo('screen-go-place')">行きたい！を チケットにする</button>
+                  <button class="sub-btn" onclick="goTo('screen-go-place')">行きたいばしょを とうろくする</button>
                   <button class="sub-btn" onclick="openForm()">アンケートに もどる</button>
                   <button class="sub-btn" onclick="resetGame()">クイズを おわる</button>
           </div>
@@ -1088,7 +1126,7 @@
       <div class="button-stack">
         <button class="sub-btn go-when-btn" onclick="selectGoWhen('今週末', this)">今週の土日</button>
         <button class="sub-btn go-when-btn" onclick="selectGoWhen('夏休み', this)">夏休み</button>
-        <button class="sub-btn go-when-btn" onclick="selectGoWhen('夏休み', this)">冬休み</button> 
+        <button class="sub-btn go-when-btn" onclick="selectGoWhen('冬休み', this)">冬休み</button> 
         <button class="sub-btn go-when-btn" onclick="selectGoWhen('今度いつか', this)">今度いつか</button>
       </div>
 
@@ -1137,6 +1175,8 @@
         <p class="center-note">おうちの人に 見せてみよう。</p>
 
         <div id="go-box-card" class="go-ticket-card">
+          <h3 class="go-list-title">いまの 行きたいところ</h3>
+<div id="go-list" class="go-list"></div>
   <div class="ticket-label">📍 行きたいところ</div>
 
   <div class="ticket-row">
@@ -1391,6 +1431,7 @@
 
     function resetGame() {
       completed = [];
+      goList = [];
       saveProgress();
       goTo("screen-title");
     }
@@ -1398,6 +1439,7 @@
   let selectedGoPlace = "";
 let selectedGoWhen = "";
 let selectedGoPurpose = "";
+    let goList = [];
 
 function clearSelected(className) {
   document.querySelectorAll(className).forEach(btn => {
@@ -1553,17 +1595,47 @@ function selectGoPurpose(purpose, buttonEl) {
 
 function finishGoBox() {
   if (!selectedGoPurpose) {
-    document.getElementById("go-purpose-result").textContent = "1つ えらんでから BOXに いれてね。";
+    document.getElementById("go-purpose-result").textContent = "1つ えらんでから とうろくしてね。";
     return;
   }
+
+  const newItem = {
+    place: selectedGoPlace,
+    when: selectedGoWhen,
+    purpose: selectedGoPurpose
+  };
+
+  goList.push(newItem);
 
   document.getElementById("go-box-place").textContent = selectedGoPlace;
   document.getElementById("go-box-when").textContent = selectedGoWhen;
   document.getElementById("go-box-purpose").textContent = selectedGoPurpose;
 
+  renderGoList();
+
   goTo("screen-go-box");
 }
 
+function renderGoList() {
+  const listEl = document.getElementById("go-list");
+
+  if (!listEl) return;
+
+  if (goList.length === 0) {
+    listEl.innerHTML = "<p class='center-note'>まだ とうろくは ありません。</p>";
+    return;
+  }
+
+  listEl.innerHTML = goList.map((item, index) => {
+    return `
+      <div class="go-list-item">
+        <strong>${index + 1}. ${item.place}</strong>
+        <span>${item.when}に、${item.purpose}</span>
+      </div>
+    `;
+  }).join("");
+}
+    
 function resetGoFlow() {
   selectedGoPlace = "";
   selectedGoWhen = "";
