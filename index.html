@@ -261,6 +261,18 @@
       transition: transform .14s ease;
     }
 
+    .register-btn {
+  background: linear-gradient(180deg, #fff3b0, #ffd76a);
+  color: #304255;
+  border: 3px solid #ffc94d;
+  box-shadow: 0 8px 18px rgba(255, 199, 70, 0.28);
+  font-size: 20px;
+}
+
+.register-btn::after {
+  content: " →";
+}
+
     .main-btn {
       background: linear-gradient(180deg, var(--blue), var(--blue-deep));
       color: white;
@@ -787,6 +799,8 @@
   margin: 0 auto;
 }
 
+    
+
     @media (min-width: 420px) {
       .cards-grid {
         grid-template-columns: repeat(3, 1fr);
@@ -909,8 +923,8 @@
             <p class="center-note"> つぎに なにをする？<br>えらんで すすんでね。</p>
           </div>
           <div class="button-stack">
-                  <button class="main-btn" onclick="goTo('screen-extra-quiz')">もっと知りたい！<br>追加クイズに すすむ</button>
-                  <button class="sub-btn" onclick="goTo('screen-go-place')">行きたいばしょを とうろくする</button>
+                  <button class="main-btn" onclick="goTo('screen-extra-quiz')">もっと知りたい！<br>⭐ボーナスクイズに すすむ</button>
+                  <button class="sub-btn" onclick="goTo('screen-go-place')">📍気になったばしょを とうろくする</button>
                   <button class="sub-btn" onclick="openForm()">アンケートに もどる</button>
                   <button class="sub-btn" onclick="resetGame()">クイズを おわる</button>
           </div>
@@ -921,11 +935,11 @@
 
 <section id="screen-extra-quiz" class="screen">
   <div class="slide theme-complete">
-    <div class="slide-head"><span>ついかクイズ</span><span>✨ もっと知りたい！</span></div>
+    <div class="slide-head"><span>⭐ボーナスクイズ</span><span>✨ もっと知りたい！</span></div>
     <div class="slide-body" style="justify-content:center;">
       <div class="complete-panel">
         <h2 class="complete-title">もっと知りたい場所はどれ？</h2>
-        <p class="center-note">気になる クイズBOXを えらんでね。</p>
+        <p class="center-note">気になる クイズを えらんでね。</p>
       </div>
 
       <div class="button-stack">
@@ -940,7 +954,7 @@
     
 <section id="screen-extra-quiz-space" class="screen">
   <div class="slide theme-question">
-    <div class="slide-head"><span>ついかクイズ</span><span>🚀 もっと知りたい！</span></div>
+    <div class="slide-head"><span>⭐ボーナスクイズ</span><span>🚀 もっと知りたい！</span></div>
     <div class="slide-body">
       <div class="question-panel">
         <div class="question-frame">
@@ -1020,7 +1034,7 @@
       </div>
 
       <div class="button-stack">
-        <button class="sub-btn" onclick="goTo('screen-extra-quiz')">追加クイズ選択に もどる</button>
+        <button class="sub-btn" onclick="goTo('screen-extra-quiz')">ボーナスクイズ選択に もどる</button>
       </div>
     </div>
   </div>
@@ -1066,7 +1080,7 @@
       </div>
 
       <div class="button-stack">
-        <button class="sub-btn" onclick="goTo('screen-extra-quiz')">追加クイズ選択に もどる</button>
+        <button class="sub-btn" onclick="goTo('screen-extra-quiz')">ボーナスクイズ選択に もどる</button>
       </div>
     </div>
   </div>
@@ -1085,7 +1099,7 @@
 
       <div class="button-stack">
          <button class="main-btn" onclick="goTo('screen-extra-quiz')">もう1つ クイズを やる</button>
-        <button class="sub-btn" onclick="goTo('screen-go-place')">行きたいばしょに　とうろくする</button>
+        <button class="sub-btn" onclick="goTo('screen-go-place')">気になったばしょを　とうろくする</button>
         <button class="sub-btn" onclick="goTo('screen-complete')">コンプリート画面に もどる</button>
         <button class="sub-btn" onclick="openForm()">アンケートに もどる</button>
       </div>
@@ -1172,10 +1186,10 @@
 
   <section id="screen-go-box" class="screen">
   <div class="slide theme-complete">
-    <div class="slide-head"><span>行きたいばしょに</span><span>📍 とうろくしたよ！</span></div>
+    <div class="slide-head"><span>気になったばしょに</span><span>📍 とうろくしたよ！</span></div>
     <div class="slide-body" style="justify-content:center;">
       <div class="complete-panel">
-        <h2 class="complete-title">行きたいばしょに とうろくしたよ！</h2>
+        <h2 class="complete-title">気になったばしょに とうろくしたよ！</h2>
         <p class="center-note">おうちの人に 見せてみよう。</p>
 
          <h3 class="go-list-title">いまの 行きたいところ</h3>
