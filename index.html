@@ -1336,6 +1336,7 @@
       quizData.forEach((card, index) => {
        const resultStatus = completed[card.id];
        const done = !!resultStatus;
+        const ribbonText = resultStatus === "correct" ? "できた" : resultStatus === "wrong" ? "おしい" : "";
     const ribbonClass = resultStatus === "correct" ? "ribbon-correct" : resultStatus === "wrong" ? "ribbon-wrong" : "";
         const button = document.createElement("button");
         button.className = "card-item";
