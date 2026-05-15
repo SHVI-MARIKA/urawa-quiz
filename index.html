@@ -1317,12 +1317,11 @@
       }
     }
 
-    function renderCardSelect() {
-      if (completed.length === quizData.length) {
-        goTo("screen-complete");
-        return;
-      }
-
+ function renderCardSelect() {
+  if (Object.keys(completed).length === quizData.length) {
+    goTo("screen-complete");
+    return;
+  }
       const container = document.getElementById("cards-container");
       container.innerHTML = "";
 
