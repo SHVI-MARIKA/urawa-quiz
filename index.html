@@ -810,6 +810,14 @@
   box-shadow: 0 6px 14px rgba(255, 199, 70, 0.18) !important;
   font-size: 20px;
 }
+
+    .done-ribbon.ribbon-correct {
+  background: linear-gradient(180deg, #8ed96a, #5ab865);
+}
+
+.done-ribbon.ribbon-wrong {
+  background: linear-gradient(180deg, #ff9b9b, #f06464);
+}
   </style>
 </head>
 <body>
@@ -1328,11 +1336,12 @@
       quizData.forEach((card, index) => {
        const resultStatus = completed[card.id];
        const done = !!resultStatus;
-       const ribbonText = resultStatus === "correct" ? "できた" : resultStatus === "wrong" ? "おしい" : "";        const button = document.createElement("button");
+    const ribbonClass = resultStatus === "correct" ? "ribbon-correct" : resultStatus === "wrong" ? "ribbon-wrong" : "";
+        const button = document.createElement("button");
         button.className = "card-item";
         button.innerHTML = `
           <div class="card-surface ${card.themeClass}" aria-label="${card.label}">
-        ${done ? `<div class="done-ribbon">${ribbonText}</div>` : ''}
+     ${done ? `<div class="done-ribbon ${ribbonClass}">${ribbonText}</div>` : ''}
             <div class="card-top">
               <span class="card-chip">${card.label}</span>
             </div>
