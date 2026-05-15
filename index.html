@@ -1292,7 +1292,7 @@
 
     const badgeClasses = ["badge-a", "badge-b", "badge-c"];
     let currentCardIndex = null;
-    let completed = JSON.parse(sessionStorage.getItem("urawaQuizCompleted") || "[]");
+  let completed = JSON.parse(sessionStorage.getItem("urawaQuizCompleted") || "{}");
 
     function saveProgress() {
       sessionStorage.setItem("urawaQuizCompleted", JSON.stringify(completed));
@@ -1327,12 +1327,13 @@
       container.innerHTML = "";
 
       quizData.forEach((card, index) => {
-        const done = completed.includes(card.id);
-        const button = document.createElement("button");
+       const resultStatus = completed[card.id];
+       const done = !!resultStatus;
+       const ribbonText = resultStatus === "correct" ? "できた" : resultStatus === "wrong" ? "おしい" : "";        const button = document.createElement("button");
         button.className = "card-item";
         button.innerHTML = `
           <div class="card-surface ${card.themeClass}" aria-label="${card.label}">
-            ${done ? '<div class="done-ribbon">CLEAR</div>' : ''}
+        ${done ? `<div class="done-ribbon">${ribbonText}</div>` : ''}
             <div class="card-top">
               <span class="card-chip">${card.label}</span>
             </div>
@@ -1357,7 +1358,7 @@
         }
       });
 
-      const progressText = `クリア ${completed.length} / ${quizData.length}`;
+  const progressText = `クリア ${Object.keys(completed).length} / ${quizData.length}`;
       document.getElementById("progress-text").textContent = progressText;
       document.getElementById("progress-text-top").textContent = progressText;
       goTo("screen-cards");
@@ -1411,24 +1412,22 @@
       resultTopLabel.textContent = isCorrect ? "🎉 せいかい" : "🌼 おしい";
       resultMainBtn.className = "main-btn";
 
-      const nextCompletedCount = completed.length + (completed.includes(card.id) ? 0 : 1);
-      const isAllCompleted = nextCompletedCount === quizData.length;
-
+     const nextCompletedCount = Object.keys(completed).length + (completed[card.id] ? 0 : 1);
+const isAllCompleted = nextCompletedCount === quizData.length;
+      
       resultMainBtn.textContent = isAllCompleted
         ? "のこりのカードを みる"
         : "ほかのカードを ひく";
       resultFormBtn.style.display = isAllCompleted ? "block" : "none";
 
-      if (!completed.includes(card.id)) {
-        completed.push(card.id);
-        saveProgress();
-      }
-
+ completed[card.id] = isCorrect ? "correct" : "wrong";
+saveProgress();
+      
       goTo("screen-result");
     }
 
     function resetGame() {
-      completed = [];
+    completed = {};
       goList = [];
       saveProgress();
       goTo("screen-title");
