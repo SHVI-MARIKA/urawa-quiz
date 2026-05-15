@@ -1300,12 +1300,16 @@
 
     const badgeClasses = ["badge-a", "badge-b", "badge-c"];
     let currentCardIndex = null;
-  let completed = JSON.parse(sessionStorage.getItem("urawaQuizCompleted") || "{}");
+let completed = JSON.parse(sessionStorage.getItem("urawaQuizCompleted") || "{}");
 
-    function saveProgress() {
-      sessionStorage.setItem("urawaQuizCompleted", JSON.stringify(completed));
-    }
+if (Array.isArray(completed)) {
+  completed = {};
+  sessionStorage.setItem("urawaQuizCompleted", JSON.stringify(completed));
+}
 
+function saveProgress() {
+  sessionStorage.setItem("urawaQuizCompleted", JSON.stringify(completed));
+}
     function goTo(screenId) {
       document.querySelectorAll(".screen").forEach(screen => screen.classList.remove("active"));
       document.getElementById(screenId).classList.add("active");
