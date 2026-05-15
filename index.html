@@ -879,6 +879,7 @@
           <div class="progress-badge" id="progress-text">クリア 0 / 4</div>
           <div class="cards-grid" id="cards-container"></div>
           <div class="button-stack">
+              <button class="main-btn" id="cards-complete-btn" onclick="goTo('screen-complete')" style="display:none;">ぜんぶ見た！つぎへ</button>
             <button class="sub-btn" onclick="resetGame()">はじめから やりなおす</button>
           </div>
         </div>
@@ -1330,10 +1331,6 @@ function saveProgress() {
     }
 
  function renderCardSelect() {
-  if (Object.keys(completed).length === quizData.length) {
-    goTo("screen-complete");
-    return;
-  }
       const container = document.getElementById("cards-container");
       container.innerHTML = "";
 
@@ -1372,9 +1369,15 @@ function saveProgress() {
       });
 
   const progressText = `クリア ${Object.keys(completed).length} / ${quizData.length}`;
-      document.getElementById("progress-text").textContent = progressText;
-      document.getElementById("progress-text-top").textContent = progressText;
-      goTo("screen-cards");
+ document.getElementById("progress-text").textContent = progressText;
+document.getElementById("progress-text-top").textContent = progressText;
+
+const completeBtn = document.getElementById("cards-complete-btn");
+if (completeBtn) {
+  completeBtn.style.display = Object.keys(completed).length === quizData.length ? "block" : "none";
+}
+
+goTo("screen-cards");
     }
 
     function openQuestion(index) {
