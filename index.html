@@ -1436,8 +1436,9 @@ const isAllCompleted = nextCompletedCount === quizData.length;
       resultMainBtn.textContent = isAllCompleted
         ? "のこりのカードを みる"
         : "ほかのカードを ひく";
-      resultFormBtn.style.display = isAllCompleted ? "block" : "none";
-
+ if (resultFormBtn) {
+  resultFormBtn.style.display = "none";
+}
  completed[card.id] = isCorrect ? "correct" : "wrong";
 saveProgress();
       
